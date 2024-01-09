@@ -1,0 +1,40 @@
+{
+  "name": "onlinestore",
+  "version": "1.0.0",
+  "description": "Online Store",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RohiniReddyMarthala/OnlineShopping.git"
+  },
+  "keywords": [],
+  "author": "Rohini Reddy Marthala",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RohiniReddyMarthala/OnlineShopping/issues"
+  },
+  "homepage": "https://github.com/RohiniReddyMarthala/OnlineShopping#readme",
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.11.0",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.3",
+    "axios": "^1.6.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^6.21.1",
+    "react-scripts": "5.0.1"
+  },
+  "browserslist": [
+    "last 3 vrsions"
+  ]
+}
