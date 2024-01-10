@@ -1,25 +1,31 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProductList from "./ProductList";
-import ProductDetails from "./ProductDetails";
-import { QueryClient, QueryClientProvider } from "react-query";
+
+const ProductList = lazy(() => import("./ProductList"));
+const ProductDetails = lazy(() => import("./ProductDetails"));
 
 function App() {
-  const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" 
-          element={<ProductList />} 
-          />
-          <Route 
-          path="/products/:id" 
-          element={<ProductDetails />} 
-          />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <ProductList />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <ProductDetails />
+            </Suspense>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

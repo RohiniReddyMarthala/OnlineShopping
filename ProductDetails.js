@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styled from '@emotion/styled';
 import { useParams } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardMedia,
-  Rating,
-} from "@mui/material";
+import { Card, CardContent, Typography, CardMedia, Rating } from "@mui/material";
 
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,9 +31,8 @@ function ProductDetails() {
           width: "100%",
           alignSelf: "stretch",
           overflow: "hidden",
-          maxWidth: "864px"
+          maxWidth: "864px",
         }}
-
         image={product.image}
         alt={product.title}
       />

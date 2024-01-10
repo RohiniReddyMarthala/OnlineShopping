@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useQuery } from "react-query";
 import {
   List,
   ListItem,
@@ -13,9 +12,10 @@ import {
   Paper,
 } from "@mui/material";
 import EmptyComponent from "./EmptyComponent";
-import Header from "./Header"; // Import the Header component
+import Header from "./Header";
+import ProductDetails from "./ProductDetails";
+import { useNavigate, useParams } from "react-router-dom";
 
-// Function to truncate the description
 const truncateDescription = (description, maxLength) => {
   if (description.length > maxLength) {
     return description.substring(0, maxLength) + " ...";
@@ -24,19 +24,36 @@ const truncateDescription = (description, maxLength) => {
 };
 
 const ProductList = () => {
-  const fetchProducts = async () => {
-    const response = await axios.get("https://fakestoreapi.com/products/");
-    return response.data;
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("https://fakestoreapi.com/products/");
+        setProducts(response.data);
+      } catch (error) {
+        setError("Error fetching products");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleItemClick = (productId) => {
+    navigate(`/products/${productId}`);
   };
 
-  const { isLoading, error, data } = useQuery("products", fetchProducts);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching products</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <>
-      {/* Move the Header component outside of the Grid */}
       <Header />
 
       <Grid container spacing={0} maxWidth="100%">
@@ -51,13 +68,13 @@ const ProductList = () => {
             elevation={3}
           >
             <List>
-              {data.map((product, index) => (
+              {products.map((product, index) => (
                 <ListItem
                   key={product.id}
-                  component="a"
-                  href={`/products/${product.id}`}
+                  onClick={() => handleItemClick(product.id)}
                   sx={{
-                    marginBottom: index < data.length - 1 ? 2 : 0,
+                    marginBottom: index < products.length - 1 ? 2 : 0,
+                    cursor: "pointer",
                   }}
                 >
                   <ListItemAvatar>
@@ -66,25 +83,26 @@ const ProductList = () => {
                       src={product.image}
                       variant="rounded"
                       sx={{
-                        width: '1.5in',
-                        height: '1.5in',
-                        objectFit: 'cover',
+                        width: "1.5in",
+                        height: "1.5in",
+                        objectFit: "cover",
                       }}
                     />
                   </ListItemAvatar>
                   <ListItemText
                     primary={
                       <span>
-                        <span style={{ color: 'purple' }}>
+                        <span style={{ color: "purple" }}>
                           {product.category}
-                        </span><br></br>
-                        <span style={{ color: 'black', fontWeight: 'bold' }}>
+                        </span>
+                        <br />
+                        <span style={{ color: "black", fontWeight: "bold" }}>
                           {` ${product.title}`}
                         </span>
                       </span>
                     }
                     secondary={truncateDescription(product.description, 100)}
-                    sx={{ marginLeft: 2, marginTop: 1 }} // Adjust the margins as needed
+                    sx={{ marginLeft: 2, marginTop: 1 }}
                   />
                 </ListItem>
               ))}
@@ -103,7 +121,11 @@ const ProductList = () => {
               alignItems: "center",
             }}
           >
-            <EmptyComponent />
+            {id ? (
+              <ProductDetails productId={id} />
+            ) : (
+              <EmptyComponent />
+            )}
           </Box>
         </Grid>
       </Grid>
