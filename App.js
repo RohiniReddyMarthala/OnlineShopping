@@ -15,7 +15,8 @@ function App() {
           />
           <Route 
           path="/products/:id" 
-          element={<ProductDetails />} />
+          element={<ProductDetails />} 
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
